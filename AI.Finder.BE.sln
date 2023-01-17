@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI.Finder.BE.Service", "AI.Finder.BE.Service\AI.Finder.BE.Service.csproj", "{0BAFECAA-3EB8-4932-AA38-8C80027E784A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AI.Finder.BE.Test", "AI.Finder.BE.Test", "{5D0AEB27-009D-43AD-BEDA-FA6C9AB551FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI.Finder.BE.Test.Unit", "AI.Finder.BE.Test\AI.Finder.BE.Test.Unit\AI.Finder.BE.Test.Unit.csproj", "{55F5168C-43E6-4582-A9CD-68E95407852C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BAFECAA-3EB8-4932-AA38-8C80027E784A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BAFECAA-3EB8-4932-AA38-8C80027E784A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BAFECAA-3EB8-4932-AA38-8C80027E784A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BAFECAA-3EB8-4932-AA38-8C80027E784A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55F5168C-43E6-4582-A9CD-68E95407852C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55F5168C-43E6-4582-A9CD-68E95407852C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55F5168C-43E6-4582-A9CD-68E95407852C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55F5168C-43E6-4582-A9CD-68E95407852C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55F5168C-43E6-4582-A9CD-68E95407852C} = {5D0AEB27-009D-43AD-BEDA-FA6C9AB551FC}
+	EndGlobalSection
+EndGlobal
