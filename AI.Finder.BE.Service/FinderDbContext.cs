@@ -11,7 +11,6 @@ namespace AI.Finder.BE.Service
         {
             modelBuilder.HasPostgresExtension("ltree");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         }
     }
 }
