@@ -30,3 +30,22 @@ Run from `AI.Finder.BE.sln` folder `dotnet restore`
         |- <Feature name>ModelConfiguration.cs [Data Model Configuration]
         |- <Feature name>Dto.cs [Data Transfer Object]
 ```
+# Finder WebApi Unit Testing
+
+## Prerequisites
+
+### Project dependency
+
+### Test project
+
+1. Project `cd .\AI.Finder.BE.Test\AI.Finder.BE.Test.Unit` folder
+2. Run test `dotnet test`
+
+### Project standards
+
+``` Structure
+|- Features[Folder]
+    |- <Feature name>s[Folder]
+        |- <Feature name>TestController.cs [Controller]
+        |- <Feature name>TestData.cs [Data Model]
+```
