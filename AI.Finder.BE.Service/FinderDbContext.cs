@@ -1,16 +1,12 @@
 using System.Reflection;
+using AI.Finder.BE.Service.Features.Samples;
 using Microsoft.EntityFrameworkCore;
-
-namespace AI.Finder.BE.Service
-{
-    public class FinderDbContext : DbContext
-    {
-          public FinderDbContext(DbContextOptions<FinderDbContext> options)
-      : base(options) { }
-       protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.HasPostgresExtension("ltree");
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
-    }
+// TODO: All the namespace become like below
+namespace AI.Finder.BE.Service;
+// TODO: All the class and functions brackets in same line
+public class FinderDbContext : DbContext{
+    public FinderDbContext(DbContextOptions options): base(options) { }
+// TODO: Add sample implimentation
+  public DbSet<SampleModel> Sample{ get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)=> _ = modelBuilder.ApplyConfigurationsFromAssembly(typeof(FinderDbContext).Assembly);
 }
