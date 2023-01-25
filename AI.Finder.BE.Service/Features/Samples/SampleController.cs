@@ -23,11 +23,11 @@ public class SampleController : ControllerBase {
             return Ok(Samples);
         }
         catch (Exception ex){
-            return BadRequest(ex.Message);
+            return BadRequest(ex);
         }
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetSamples(long id){
+    public async Task<IActionResult> GetSample(long id){
         try{
             var Sample = await _context.Sample.
             Where(e => e.Id == id)
@@ -39,7 +39,7 @@ public class SampleController : ControllerBase {
             return Ok(Sample);
         }
         catch (Exception ex){
-            return BadRequest(ex.Message);
+            return BadRequest(ex);
         }
     }
     [HttpPost]
@@ -54,7 +54,7 @@ public class SampleController : ControllerBase {
             return Ok(sample);
         }
         catch (Exception ex){
-            return BadRequest(ex.Message);
+            return BadRequest(ex);
         }
     }
     [HttpPut("{id}")]
@@ -69,7 +69,7 @@ public class SampleController : ControllerBase {
             await _context.SaveChangesAsync();
         }
         catch (Exception ex){
-            return BadRequest(ex.Message);
+            return BadRequest(ex);
         }
         return Ok();
     }
@@ -85,7 +85,7 @@ public class SampleController : ControllerBase {
             return NoContent();
         }
         catch (Exception ex){
-            return BadRequest(ex.Message);
+            return BadRequest(ex);
         }
     }
       // TODO:Error handling example
