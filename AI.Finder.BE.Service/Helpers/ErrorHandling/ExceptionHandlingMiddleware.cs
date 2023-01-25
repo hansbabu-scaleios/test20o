@@ -47,7 +47,9 @@ namespace AI.Finder.BE.Service.Helpers.ErrorHandling
                     break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    errorResponse.Message = "Internal server error!";
+                    errorResponse.Error = "Internal server error!";
+                    errorResponse.Message = exception.Message;
+                    errorResponse.StatusCode=response.StatusCode;
                     break;
             }
             _logger.LogError(exception.Message);
