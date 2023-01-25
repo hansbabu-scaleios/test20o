@@ -9,10 +9,11 @@ public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>
     {
         builder.ToTable("user");
         builder.HasKey(e => e.Id);
-        builder.HasKey(m => m.UserId);
         builder.Property(e => e.Id).ValueGeneratedOnAdd();
         builder.Property(m => m.UserId).ValueGeneratedOnAdd();
         builder.HasIndex(m => m.UserId).IsUnique();
+        builder.HasIndex(e => e.EmailId).IsUnique();
+        builder.HasIndex(e => e.PhoneNumber).IsUnique();
         builder.Property(e => e.EmailTokenGeneratedTimestamp)
             .HasColumnType("timestamp without time zone");
         builder.Property(e => e.PhoneTokenGeneratedTimestamp)
