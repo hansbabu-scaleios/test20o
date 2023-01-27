@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AI.Finder.BE.Service.Features.User
-{
-    public class UserModel
-    {
-         public long Id { get; set; }
+namespace AI.Finder.BE.Service.Features.User;
+    public class UserModel{
+        public long Id { get; set; }
         public string  UserId { get; set; }
         public string EmailId { get; set; }
         public long PhoneNumber { get; set; }
@@ -23,4 +16,3 @@ namespace AI.Finder.BE.Service.Features.User
         public AddressType Relation { get; set; }
         */
     }
-}

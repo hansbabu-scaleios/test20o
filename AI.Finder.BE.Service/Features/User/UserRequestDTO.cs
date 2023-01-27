@@ -1,6 +1,5 @@
 namespace AI.Finder.BE.Service.Features.User;
-    public class UserRequestDTO
-    {
+    public class UserRequestDTO{
         public string  UserId { get; set; }
         public string EmailId { get; set; }
         public long PhoneNumber { get; set; }

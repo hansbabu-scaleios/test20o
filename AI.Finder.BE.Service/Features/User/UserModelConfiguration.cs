@@ -2,11 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AI.Finder.BE.Service.Features.User;
-
-public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>
-{
-    public void Configure(EntityTypeBuilder<UserModel> builder)
-    {
+public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>{
+    public void Configure(EntityTypeBuilder<UserModel> builder){
         builder.ToTable("user");
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).ValueGeneratedOnAdd();
