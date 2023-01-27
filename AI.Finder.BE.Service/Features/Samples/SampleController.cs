@@ -1,10 +1,12 @@
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AI.Finder.BE.Service.Features.Samples;
 [ApiController]
 [Route("[controller]/[action]")]
+[Authorize]
 public class SampleController : ControllerBase {
     private readonly FinderDbContext _context;
     public SampleController(FinderDbContext context) {
