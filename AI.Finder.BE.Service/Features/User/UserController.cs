@@ -1,4 +1,6 @@
+using System.Security.Cryptography;
 using Mapster;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +28,7 @@ namespace AI.Finder.BE.Service.Features.User;
                 return BadRequest(ex);
             }
         }
+        /*
         [HttpGet("userId/{userId}")]
         public async Task<IActionResult> GetByUserId(string userId){
             try{
@@ -71,19 +74,31 @@ namespace AI.Finder.BE.Service.Features.User;
                 return BadRequest(ex);
             }
         }
+        */
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserRequestDTO userRequestDTO){
             try{
+                string password = userRequestDTO.Password;
+                byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
+                string Salt = Convert.ToBase64String(salt);
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: password!,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA256,
+                    iterationCount: 100000,
+                    numBytesRequested: 256 / 8));
                 var user = new UserModel{
                 UserId = userRequestDTO.UserId,
                 EmailId = userRequestDTO.EmailId,
                 PhoneNumber = userRequestDTO.PhoneNumber,
-                PasswordHash = userRequestDTO.PasswordHash,
-                PassowrdSalt = userRequestDTO.PassowrdSalt,
+                PasswordHash = hashed,
+                PassowrdSalt = Salt,
+                /*
                 EmailConfirmationToken = userRequestDTO.EmailConfirmationToken,
                 EmailTokenGeneratedTimestamp = userRequestDTO.EmailTokenGeneratedTimestamp,
                 PhoneConfirmationToken = userRequestDTO.PhoneConfirmationToken,
                 PhoneTokenGeneratedTimestamp = userRequestDTO.PhoneTokenGeneratedTimestamp
+                */
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
@@ -94,6 +109,15 @@ namespace AI.Finder.BE.Service.Features.User;
         }
          [HttpPut("id/{id}")]
         public async Task<IActionResult> UpdateByUserId(long id, UserRequestDTO userRequestDTO){
+            string password = userRequestDTO.Password;
+                byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
+                string Salt = Convert.ToBase64String(salt);
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: password!,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA256,
+                    iterationCount: 100000,
+                    numBytesRequested: 256 / 8));
            var user = await _context.Users
                         .Where(e => e.Id == id)
                         .FirstOrDefaultAsync();
@@ -103,12 +127,14 @@ namespace AI.Finder.BE.Service.Features.User;
             user.UserId = userRequestDTO.UserId;
             user.EmailId = userRequestDTO.EmailId;
             user.PhoneNumber = userRequestDTO.PhoneNumber;
-            user.PasswordHash = userRequestDTO.PasswordHash;
-            user.PassowrdSalt = userRequestDTO.PassowrdSalt;
+            user.PasswordHash = hashed;
+            user.PassowrdSalt = Salt;
+            /*
             user.EmailConfirmationToken = userRequestDTO.EmailConfirmationToken;
             user.EmailTokenGeneratedTimestamp = userRequestDTO.EmailTokenGeneratedTimestamp;
             user.PhoneConfirmationToken = userRequestDTO.PhoneConfirmationToken;
             user.PhoneTokenGeneratedTimestamp = userRequestDTO.PhoneTokenGeneratedTimestamp;
+            */
             try{
                 await _context.SaveChangesAsync();
             }catch(Exception ex){
@@ -116,6 +142,7 @@ namespace AI.Finder.BE.Service.Features.User;
             }
             return Ok();
         }
+        /*
         [HttpPut("userId/{userId}")]
         public async Task<IActionResult> UpdateByUserId(string userId, UserRequestDTO userRequestDTO){
            var user = await _context.Users
@@ -188,6 +215,7 @@ namespace AI.Finder.BE.Service.Features.User;
             }
             return Ok();
         }
+        */
         [HttpDelete("id/{id}")]
         public async Task<IActionResult> DeleteById(long id){
             try{
@@ -204,6 +232,7 @@ namespace AI.Finder.BE.Service.Features.User;
                 return BadRequest(ex);
             } 
         }
+        /*
         [HttpDelete("userId/{userId}")]
         public async Task<IActionResult> DeleteById(string userId){
             try{
@@ -252,4 +281,5 @@ namespace AI.Finder.BE.Service.Features.User;
                 return BadRequest(ex);
             }
         }
+        */
     }
