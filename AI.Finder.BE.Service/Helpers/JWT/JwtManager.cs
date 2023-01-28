@@ -29,6 +29,7 @@ public class JwtManager
     }
     public static object DecodeGeneratedToKen(HttpContext context){
         try{
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenString = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", String.Empty);
             var token = tokenHandler.ReadJwtToken(tokenString);
