@@ -9,6 +9,8 @@ public class FinderDbContext : DbContext{
     public FinderDbContext(DbContextOptions options): base(options) { }
 // TODO: Add sample implimentation
   public DbSet<SampleModel> Sample{ get; set; }
-   public DbSet<UserModel> User{ get; set; }
+
+  public DbSet<UserModel> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)=> _ = modelBuilder.ApplyConfigurationsFromAssembly(typeof(FinderDbContext).Assembly);
 }
