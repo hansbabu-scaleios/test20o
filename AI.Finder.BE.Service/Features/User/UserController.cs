@@ -3,11 +3,12 @@ using Mapster;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace AI.Finder.BE.Service.Features.User;
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UserController : ControllerBase{
         private readonly FinderDbContext _context;
         public UserController(FinderDbContext context){

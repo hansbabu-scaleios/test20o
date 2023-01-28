@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AI.Finder.BE.Service.Migrations
 {
     [DbContext(typeof(FinderDbContext))]
-    [Migration("20230125112358_MySecondMigration")]
-    partial class MySecondMigration
+    [Migration("20230128062157_MyFirstMigration")]
+    partial class MyFirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,6 +77,12 @@ namespace AI.Finder.BE.Service.Migrations
 
                     b.Property<DateTime>("PhoneTokenGeneratedTimestamp")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("RoleCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .ValueGeneratedOnAdd()

@@ -76,6 +76,12 @@ namespace AI.Finder.BE.Service.Migrations
                     b.Property<DateTime>("PhoneTokenGeneratedTimestamp")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("RoleCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("text");
+
                     b.Property<string>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");

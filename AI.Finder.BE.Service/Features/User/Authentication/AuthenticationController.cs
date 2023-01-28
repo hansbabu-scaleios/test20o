@@ -17,7 +17,28 @@ public class AuthenticationController : ControllerBase
         _context = context;
         _configuration=configuration;
     }
+     [HttpGet("{username}")]
+    public async Task<IActionResult> LogIn(string username, string password){
+        try{
+            var user = await _context.Users
+                           .Where(e => e.UserId == username)
+                           .FirstOrDefaultAsync();
+            if (user == null){
+                return BadRequest();
+            }
+            if (AuthenticationManager.IsPasswordVerified(user,password) == true){
 
+
+                return Ok(JwtManager.GenerateJwtToken(user,_configuration));
+            }
+            else {
+                return BadRequest();
+            }
+        }
+        catch (Exception ex){
+            return BadRequest(ex);
+        }
+    }
 
 
 }
