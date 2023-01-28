@@ -28,7 +28,6 @@ public class AuthenticationController : ControllerBase
             }
             if (AuthenticationManager.IsPasswordVerified(user,password) == true){
 
-
                 return Ok(JwtManager.GenerateJwtToken(user,_configuration));
             }
             else {
