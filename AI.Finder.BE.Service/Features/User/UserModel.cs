@@ -11,9 +11,6 @@ namespace AI.Finder.BE.Service.Features.User;
         public DateTime EmailTokenGeneratedTimestamp { get; set; }
         public string PhoneConfirmationToken { get; set; }
         public DateTime PhoneTokenGeneratedTimestamp { get; set; }
-        public string RoleCode { get; set; }
-        public string RoleName { get; set; }
-
 
         //TODO: CandidateId & RelationId to be added after creation of candidate and addresstype models
         /*
