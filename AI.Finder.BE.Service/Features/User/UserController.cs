@@ -13,7 +13,7 @@ namespace AI.Finder.BE.Service.Features.User;
         public UserController(FinderDbContext context){
             _context = context;
         }
-        [HttpGet("Id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id){
             try{
                 var user = await _context.Users
@@ -107,7 +107,7 @@ namespace AI.Finder.BE.Service.Features.User;
                 return BadRequest(ex);
             }
         }
-         [HttpPut("id/{id}")]
+         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateByUserId(long id, UserRequestDTO userRequestDTO){
             string password = userRequestDTO.Password;
                 byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
@@ -216,7 +216,7 @@ namespace AI.Finder.BE.Service.Features.User;
             return Ok();
         }
         */
-        [HttpDelete("id/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteById(long id){
             try{
             var user = await _context.Users

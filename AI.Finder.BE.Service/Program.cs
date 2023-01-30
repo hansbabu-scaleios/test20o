@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DotNetEnv.Env.Load();
 builder.Services.AddDbContext<FinderDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -12,16 +13,17 @@ builder.Services.AddDbContext<FinderDbContext>(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerDocument(configure => configure.Title = "Finder API V1");
+//builder.Services.AddSwaggerGen();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMiddleware<ExceptionHandlingMiddleware>();
-    app.UseSwagger();
+    app.UseOpenApi();
+    /*
     //app.UseSwaggerUI();
     app.UseSwaggerUI(c =>
    {
@@ -29,6 +31,8 @@ if (app.Environment.IsDevelopment())
        c.RoutePrefix = string.Empty;
        c.DefaultModelsExpandDepth(-1);
    });
+   */
+   app.UseSwaggerUi3();
 }
 
 app.UseHttpsRedirection();
