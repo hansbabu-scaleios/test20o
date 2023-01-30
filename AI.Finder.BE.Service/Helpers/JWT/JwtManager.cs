@@ -8,24 +8,22 @@ using Microsoft.IdentityModel.Tokens;
 namespace AI.Finder.BE.Service.Helpers.JWT;
 public class JwtManager
 {
-    public static string GenerateJwtToken(UserModel user, IConfiguration _configuration)
-    {
-        var jwt = _configuration.GetSection("Jwt").Get<JWT>();
+    public static JwtSecurityToken GenerateJwtToken(UserModel user){
         var claims = new[]{
                        new Claim(JwtClaimConstants.UserId, user.UserId),
                        new Claim(JwtClaimConstants.RoleCode,"1" ),
                        new Claim(JwtClaimConstants.RoleName,"Admin"),
                     };
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.key));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("key")));
         var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
-                       jwt.Issuer,
-                       jwt.Audience,
+                       Environment.GetEnvironmentVariable("Issuer"),
+                       Environment.GetEnvironmentVariable("Audience"),
                        claims,
-                       expires: DateTime.Now.AddMinutes(Convert.ToInt32(jwt.ExpiryTime)),
+                       expires: DateTime.Now.AddMinutes(Convert.ToInt32(Environment.GetEnvironmentVariable("ExpiryTime"))),
                        signingCredentials: credential
                     );
-        return (new JwtSecurityTokenHandler().WriteToken(token));
+        return token;
     }
     public static object DecodeGeneratedToKen(HttpContext context){
         try{
@@ -37,6 +35,7 @@ public class JwtManager
             return pl;
         }
         catch (Exception ex){
+           Console.Write(ex);
             return false;
         }
     }

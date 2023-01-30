@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 namespace AI.Finder.BE.Service.Features.User.Authentication;
 public class AuthenticationManager
 {
-    public static Boolean IsPasswordVerified(UserModel user, string password)
+    public static Boolean IsPasswordVerified(string passowrdSalt,string passwordHash, string password)
     {
-        string passwordHash = user.PasswordHash;
-        byte[] Salt = Convert.FromBase64String(user.PassowrdSalt);
+        byte[] Salt = Convert.FromBase64String(passowrdSalt);
         string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password!,
                 salt: Salt,
@@ -16,8 +15,7 @@ public class AuthenticationManager
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
         Boolean match;
-        if (hashed == passwordHash)
-        {
+        if (hashed == passwordHash) {
             match = true;
         }
         else

@@ -1,34 +1,33 @@
 using AI.Finder.BE.Service.Helpers.JWT;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AI.Finder.BE.Service.Features.User.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace AI.Finder.BE.Service.Features.User.Authentication;
 [ApiController]
-[Route("api/[controller]")]
-public class AuthenticationController : ControllerBase
+[Route("[Controller]")]
+[Authorize]
+public class AuthController : ControllerBase
 {
     private readonly FinderDbContext _context;
-    private readonly IConfiguration _configuration;
-    public AuthenticationController(FinderDbContext context,IConfiguration configuration)
-    {
+    public AuthController(FinderDbContext context){
         _context = context;
-        _configuration=configuration;
     }
-     [HttpGet("{username}")]
-    public async Task<IActionResult> LogIn(string username, string password){
+     [HttpPost("login")]
+     [AllowAnonymous]
+    public async Task<IActionResult> PostLogIn([FromBody] AuthRequestDTO req){
         try{
             var user = await _context.Users
-                           .Where(e => e.UserId == username)
+                           .Where(e => e.UserId == req.UserId)
                            .FirstOrDefaultAsync();
             if (user == null){
                 return BadRequest();
             }
-            if (AuthenticationManager.IsPasswordVerified(user,password) == true){
+//TODO: Add salt and password
+            if (AuthenticationManager.IsPasswordVerified(user.PassowrdSalt,user.PasswordHash,req.Password) == true){
 
-                return Ok(JwtManager.GenerateJwtToken(user,_configuration));
+                return Ok(new AuthResponseDto { Success = true, Token = new JwtSecurityTokenHandler().WriteToken(JwtManager.GenerateJwtToken(user)) });
             }
             else {
                 return BadRequest();
@@ -38,7 +37,5 @@ public class AuthenticationController : ControllerBase
             return BadRequest(ex);
         }
     }
-
-
 }
 
