@@ -11,25 +11,30 @@ namespace AI.Finder.BE.Service.Features.User.Authentication;
 public class AuthController : ControllerBase
 {
     private readonly FinderDbContext _context;
-    public AuthController(FinderDbContext context){
+    public AuthController(FinderDbContext context)
+    {
         _context = context;
     }
-     [HttpPost("login")]
-     [AllowAnonymous]
+    [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> PostLogIn([FromBody] AuthRequestDTO req){
         try{
+            var expiryDate = Environment.GetEnvironmentVariable("ExpiryTime");
             var user = await _context.Users
                            .Where(e => e.UserId == req.UserId)
                            .FirstOrDefaultAsync();
             if (user == null){
                 return BadRequest();
             }
-//TODO: Add salt and password
-            if (AuthenticationManager.IsPasswordVerified(user.PassowrdSalt,user.PasswordHash,req.Password) == true){
+            if (AuthenticationManager.IsPasswordVerified(user.PassowrdSalt, user.PasswordHash, req.Password) == true){
 
-                return Ok(new AuthResponseDto { Success = true, Token = new JwtSecurityTokenHandler().WriteToken(JwtManager.GenerateJwtToken(user)) });
+                return Ok(new AuthResponseDto
+                {
+                    Success = true,
+                    Token = new JwtSecurityTokenHandler().WriteToken(JwtManager.GenerateJwtToken(user.UserId, expiryDate))
+                });
             }
-            else {
+            else{
                 return BadRequest();
             }
         }
@@ -37,5 +42,28 @@ public class AuthController : ControllerBase
             return BadRequest(ex);
         }
     }
+    [HttpGet("RefreshToken")]
+    [AllowAnonymous]
+    public  IActionResult RefreshToken(){
+        try{
+            JwtClaimsValue userIdentity = JwtManager.DecodeGeneratedToKen(HttpContext);
+            var RefreshexpiryDate = Environment.GetEnvironmentVariable("RefreshTokenExpiry");
+            if (userIdentity == null)
+            {
+                return BadRequest();
+            }
+            JwtManager.GenerateJwtToken(userIdentity.UserId, RefreshexpiryDate);
+             return  Ok(new AuthResponseDto
+            {
+                Success = true,
+                Token = new JwtSecurityTokenHandler().WriteToken(JwtManager.GenerateJwtToken(userIdentity.UserId, RefreshexpiryDate))
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
 }
 

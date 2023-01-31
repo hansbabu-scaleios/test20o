@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace AI.Finder.BE.Service.Features.User.Authentication;

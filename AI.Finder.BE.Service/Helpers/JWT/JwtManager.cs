@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using AI.Finder.BE.Service.Features.User;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 namespace AI.Finder.BE.Service.Helpers.JWT;
 public class JwtManager
 {
-    public static JwtSecurityToken GenerateJwtToken(UserModel user){
+    public static JwtSecurityToken GenerateJwtToken(string UserId,string ExpiryDate)
+    {
         var claims = new[]{
-                       new Claim(JwtClaimConstants.UserId, user.UserId),
+                       new Claim(JwtClaimConstants.UserId, UserId),
                        new Claim(JwtClaimConstants.RoleCode,"1" ),
                        new Claim(JwtClaimConstants.RoleName,"Admin"),
                     };
@@ -20,24 +22,22 @@ public class JwtManager
                        Environment.GetEnvironmentVariable("Issuer"),
                        Environment.GetEnvironmentVariable("Audience"),
                        claims,
-                       expires: DateTime.Now.AddMinutes(Convert.ToInt32(Environment.GetEnvironmentVariable("ExpiryTime"))),
+                       expires: DateTime.Now.AddMinutes(Convert.ToInt32(ExpiryDate)),
                        signingCredentials: credential
                     );
         return token;
     }
-    public static object DecodeGeneratedToKen(HttpContext context){
-        try{
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenString = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", String.Empty);
-            var token = tokenHandler.ReadJwtToken(tokenString);
-            var pl = token.Payload;
-            return pl;
-        }
-        catch (Exception ex){
-           Console.Write(ex);
-            return false;
-        }
+    public static JwtClaimsValue DecodeGeneratedToKen(HttpContext context)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenString = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", String.Empty);
+        var token = tokenHandler.ReadJwtToken(tokenString);
+        return (new JwtClaimsValue
+        {
+            UserId = token.Claims.First(c => c.Type == "userid").Value,
+            RoleName = token.Claims.First(c => c.Type == "rolename").Value,
+            Rolecode = token.Claims.First(c => c.Type == "rolecode").Value
+        });
     }
 }
 
