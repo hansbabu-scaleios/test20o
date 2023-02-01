@@ -44,7 +44,7 @@ public class AuthController : ControllerBase
     }
     [HttpGet("RefreshToken")]
     [AllowAnonymous]
-    public  IActionResult RefreshToken(){
+    public async Task<IActionResult> RefreshToken(){
         try{
             JwtClaimsValue userIdentity = JwtManager.DecodeGeneratedToKen(HttpContext);
             var RefreshexpiryDate = Environment.GetEnvironmentVariable("RefreshTokenExpiry");

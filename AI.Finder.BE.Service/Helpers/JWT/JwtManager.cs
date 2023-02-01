@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace AI.Finder.BE.Service.Helpers.JWT;
 public class JwtManager
 {
-    public static JwtSecurityToken GenerateJwtToken(string UserId,string ExpiryDate)
+    public static  JwtSecurityToken GenerateJwtToken(string UserId,string ExpiryDate)
     {
         var claims = new[]{
                        new Claim(JwtClaimConstants.UserId, UserId),
@@ -18,21 +18,21 @@ public class JwtManager
                     };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("key")));
         var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(
+        var token = new  JwtSecurityToken(
                        Environment.GetEnvironmentVariable("Issuer"),
                        Environment.GetEnvironmentVariable("Audience"),
                        claims,
                        expires: DateTime.Now.AddMinutes(Convert.ToInt32(ExpiryDate)),
                        signingCredentials: credential
                     );
-        return token;
+        return  token;
     }
-    public static JwtClaimsValue DecodeGeneratedToKen(HttpContext context)
+    public  static   JwtClaimsValue DecodeGeneratedToKen(HttpContext context)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenString = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", String.Empty);
-        var token = tokenHandler.ReadJwtToken(tokenString);
-        return (new JwtClaimsValue
+        var token =  tokenHandler.ReadJwtToken(tokenString);
+       return  (new JwtClaimsValue
         {
             UserId = token.Claims.First(c => c.Type == "userid").Value,
             RoleName = token.Claims.First(c => c.Type == "rolename").Value,
