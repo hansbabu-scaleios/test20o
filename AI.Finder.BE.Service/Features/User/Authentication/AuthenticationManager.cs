@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace AI.Finder.BE.Service.Features.User.Authatication;
-public class AuthenticationManager{
-    public Boolean IsPasswordVerified(string salt, string hash, string password){
+namespace AI.Finder.BE.Service.Features.User.Authentication;
+public class AuthenticationManager
+{
+    public static Boolean IsPasswordVerified(string salt, string hash, string password)
+    {
         string passwordHash = hash;
         byte[] Salt = Convert.FromBase64String(salt);
         string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(

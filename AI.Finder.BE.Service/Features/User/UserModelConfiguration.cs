@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AI.Finder.BE.Service.Features.User;
+
 public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>{
     public void Configure(EntityTypeBuilder<UserModel> builder){
         builder.ToTable("user");
@@ -17,4 +18,5 @@ public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>{
             .HasColumnType("timestamp without time zone");
         //TODO: CandidateId & RelationId to be added after creation of candidate and addresstype models
     }
+
 }

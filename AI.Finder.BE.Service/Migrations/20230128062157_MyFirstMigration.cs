@@ -6,10 +6,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AI.Finder.BE.Service.Migrations
 {
-    public partial class MySecondMigration : Migration
+    public partial class MyFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "sample",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Code = table.Column<long>(type: "bigint", nullable: false),
+                    AuditProp = table.Column<string>(type: "jsonb", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sample", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "user",
                 columns: table => new
@@ -24,12 +38,20 @@ namespace AI.Finder.BE.Service.Migrations
                     EmailConfirmationToken = table.Column<string>(type: "text", nullable: true),
                     EmailTokenGeneratedTimestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     PhoneConfirmationToken = table.Column<string>(type: "text", nullable: true),
-                    PhoneTokenGeneratedTimestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    PhoneTokenGeneratedTimestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    RoleCode = table.Column<string>(type: "text", nullable: true),
+                    RoleName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sample_Code",
+                table: "sample",
+                column: "Code",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_EmailId",
@@ -52,6 +74,9 @@ namespace AI.Finder.BE.Service.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "sample");
+
             migrationBuilder.DropTable(
                 name: "user");
         }
