@@ -4,7 +4,8 @@ using AI.Finder.BE.Service.Helpers.ErrorHandling;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,32 +24,22 @@ builder.Services.AddDbContext<FinderDbContext>(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddControllers().AddJsonOptions(option=>{option.JsonSerializerOptions.PropertyNamingPolicy=null;});
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerDocument(configure => configure.Title = "Finder API V1");
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-builder.Services.AddSwaggerGen(option =>
+builder.Services.AddOpenApiDocument(document => 
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Finder API", Version = "v1" });
-    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
     {
-        In = ParameterLocation.Header,
+        In = OpenApiSecurityApiKeyLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
+        Type = OpenApiSecuritySchemeType.Http,
         BearerFormat = "JWT",
-        Scheme = "Bearer"
+        Scheme = "Bearer",
     });
-    option.AddSecurityRequirement(new OpenApiSecurityRequirement{{
-            new OpenApiSecurityScheme{
-                Reference = new OpenApiReference{
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
+    document.OperationProcessors.Add(
+        new AspNetCoreOperationSecurityScopeProcessor("JWT"));
     });
-});
+
+
 
 //implimentation ofjwt token
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
@@ -68,13 +59,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()){
     app.UseMiddleware<ExceptionHandlingMiddleware>();
-
     app.UseOpenApi();
-    app.UseSwaggerUi3(c =>{
-       c.SwaggerEndpoint("/swagger/v1/swagger.json", "Finder API V1");
-       c.RoutePrefix = string.Empty;
-       c.DefaultModelsExpandDepth(-1);
-   });
+    app.UseSwaggerUi3();
 }
 
 app.UseHttpsRedirection();

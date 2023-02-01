@@ -23,7 +23,7 @@ export class UserClient {
 
     }
 
-    getById(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    getById(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/User/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -51,7 +51,7 @@ export class UserClient {
         });
     }
 
-    protected processGetById(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processGetById(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -76,10 +76,10 @@ export class UserClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    updateByUserId(id: number, userRequestDTO: UserRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    updateByUserId(id: number, userRequestDTO: UserRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/User/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -111,7 +111,7 @@ export class UserClient {
         });
     }
 
-    protected processUpdateByUserId(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processUpdateByUserId(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -136,10 +136,10 @@ export class UserClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    deleteById(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    deleteById(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/User/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -167,7 +167,7 @@ export class UserClient {
         });
     }
 
-    protected processDeleteById(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processDeleteById(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -192,10 +192,10 @@ export class UserClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    createUser(userRequestDTO: UserRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    createUser(userRequestDTO: UserRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -224,7 +224,7 @@ export class UserClient {
         });
     }
 
-    protected processCreateUser(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processCreateUser(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -249,7 +249,131 @@ export class UserClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
+export class AuthClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    postLogIn(req: AuthRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/Auth/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(req);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processPostLogIn(_response);
+        });
+    }
+
+    protected processPostLogIn(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    refreshToken(  cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/Auth/RefreshToken";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            responseType: "blob",
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRefreshToken(_response);
+        });
+    }
+
+    protected processRefreshToken(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
     }
 }
 
@@ -266,7 +390,7 @@ export class SampleClient {
 
     }
 
-    getSamples(  cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    getSamples(  cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/Sample/GetSamples";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -291,7 +415,7 @@ export class SampleClient {
         });
     }
 
-    protected processGetSamples(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processGetSamples(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -316,10 +440,10 @@ export class SampleClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    getSample(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    getSample(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/Sample/GetSample/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -347,7 +471,7 @@ export class SampleClient {
         });
     }
 
-    protected processGetSample(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processGetSample(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -372,10 +496,10 @@ export class SampleClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    addSample(sampleRequestDTO: SampleRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    addSample(sampleRequestDTO: SampleRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/Sample/AddSample";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -404,7 +528,7 @@ export class SampleClient {
         });
     }
 
-    protected processAddSample(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processAddSample(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -429,10 +553,10 @@ export class SampleClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    updateSample(id: number, sampleRequestDTO: SampleRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    updateSample(id: number, sampleRequestDTO: SampleRequestDTO , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/Sample/UpdateSample/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -464,7 +588,7 @@ export class SampleClient {
         });
     }
 
-    protected processUpdateSample(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processUpdateSample(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -489,10 +613,10 @@ export class SampleClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    deleteSample(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    deleteSample(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/Sample/DeleteSample/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -520,7 +644,7 @@ export class SampleClient {
         });
     }
 
-    protected processDeleteSample(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processDeleteSample(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -545,10 +669,10 @@ export class SampleClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 
-    getSamplesForEXceptionHandling(id: number | null , cancelToken?: CancelToken | undefined): Promise<FileResponse | null> {
+    getSamplesForEXceptionHandling(id: number | null , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/Sample/GetSamplesForEXceptionHandling/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -576,7 +700,7 @@ export class SampleClient {
         });
     }
 
-    protected processGetSamplesForEXceptionHandling(response: AxiosResponse): Promise<FileResponse | null> {
+    protected processGetSamplesForEXceptionHandling(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -601,20 +725,25 @@ export class SampleClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<FileResponse>(null as any);
     }
 }
 
 export interface UserRequestDTO {
-    userId?: string | undefined;
-    emailId?: string | undefined;
-    phoneNumber: number;
-    password?: string | undefined;
+    UserId?: string | undefined;
+    EmailId?: string | undefined;
+    PhoneNumber?: number;
+    Password?: string | undefined;
+}
+
+export interface AuthRequestDTO {
+    UserId?: string | undefined;
+    Password?: string | undefined;
 }
 
 export interface SampleRequestDTO {
-    code: number;
-    auditProp?: string | undefined;
+    Code?: number;
+    AuditProp?: string | undefined;
 }
 
 export interface FileResponse {
