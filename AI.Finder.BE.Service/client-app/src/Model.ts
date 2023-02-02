@@ -729,6 +729,133 @@ export class SampleClient {
     }
 }
 
+export class SampleAutherizationClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    getData(id: number , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/SampleAutherization/{Id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            responseType: "blob",
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetData(_response);
+        });
+    }
+
+    protected processGetData(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    createData(name: string | null | undefined, address: string | null | undefined , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/SampleAutherization?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        if (address !== undefined && address !== null)
+            url_ += "address=" + encodeURIComponent("" + address) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateData(_response);
+        });
+    }
+
+    protected processCreateData(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
 export interface UserRequestDTO {
     UserId?: string | undefined;
     EmailId?: string | undefined;

@@ -5,7 +5,7 @@ namespace AI.Finder.BE.Service.Helpers.JWT
            public const string UserId ="userid";
            public const string UserName ="username";
            public const string RoleCode="rolecode";
-           public const string RoleName ="rolename";
+           public const string Role ="role";
 
     }
 }
