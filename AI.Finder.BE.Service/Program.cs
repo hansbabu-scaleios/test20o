@@ -1,5 +1,7 @@
 using System.Text;
 using AI.Finder.BE.Service;
+using AI.Finder.BE.Service.Configuration;
+using AI.Finder.BE.Service.Helpers;
 using AI.Finder.BE.Service.Helpers.ErrorHandling;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
     var dotenv = Path.Combine(root, ".env");
     DotNetEnv.Env.Load(dotenv);
 
-//var services = builder.Services;
-//services.AddSingleton(config);
+//builder.Services.AddSingleton<TokenInfo>(FinderSetting.GetTokenInfo());
+
+
 
 builder.Services.AddDbContext<FinderDbContext>(options =>
 {

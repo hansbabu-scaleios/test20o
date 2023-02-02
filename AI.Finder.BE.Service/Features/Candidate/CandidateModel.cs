@@ -13,7 +13,6 @@ using AI.Finder.BE.Service.Features.Language;
 using AI.Finder.BE.Service.Features.AddressType;
 
 namespace AI.Finder.BE.Service.Features.Candidate;
-
     public class CandidateModel{
         public long Id { get; set; }
         public GenderModel Gender { get; set; }

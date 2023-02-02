@@ -10,17 +10,17 @@ namespace AI.Finder.BE.Service.Features.User.Authentication;
 [Authorize]
 public class AuthController : ControllerBase
 {
-    private readonly FinderDbContext _context;
+    private readonly FinderDbContext context;
     public AuthController(FinderDbContext context)
     {
-        _context = context;
+        this.context = context;
     }
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> PostLogIn([FromBody] AuthRequestDTO req){
         try{
             var expiryDate = Environment.GetEnvironmentVariable("ExpiryTime");
-            var user = await _context.Users
+            var user = await context.Users
                            .Where(e => e.UserId == req.UserId)
                            .FirstOrDefaultAsync();
             if (user == null){
