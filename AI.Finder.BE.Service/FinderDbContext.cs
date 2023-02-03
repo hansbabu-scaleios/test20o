@@ -1,5 +1,6 @@
 using System.Reflection;
 using AI.Finder.BE.Service.Features.Samples;
+using AI.Finder.BE.Service.Features.Samples.SampleAutherization;
 using AI.Finder.BE.Service.Features.User;
 using Microsoft.EntityFrameworkCore;
 using AI.Finder.BE.Service.Features.Candidate;
@@ -11,6 +12,7 @@ public class FinderDbContext : DbContext{
     public FinderDbContext(DbContextOptions options): base(options) { }
 // TODO: Add sample implimentation
   public DbSet<SampleModel> Sample{ get; set; }
+  public DbSet<SampleAutherizationModel> SampleAutherization{ get; set; }
 
   public DbSet<UserModel> Users { get; set; }
   public DbSet<CandidateModel> Candidates { get; set; }

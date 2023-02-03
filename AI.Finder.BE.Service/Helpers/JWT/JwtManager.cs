@@ -11,7 +11,7 @@ public class JwtManager
         var claims = new[]{
                        new Claim(JwtClaimConstants.UserId, UserId),
                        new Claim(JwtClaimConstants.RoleCode,"1" ),
-                       new Claim(JwtClaimConstants.RoleName,"Admin"),
+                       new Claim(JwtClaimConstants.Role,"Admin"),
                     };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("key")));
         var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

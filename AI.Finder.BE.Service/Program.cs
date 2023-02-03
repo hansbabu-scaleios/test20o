@@ -1,7 +1,5 @@
 using System.Text;
 using AI.Finder.BE.Service;
-using AI.Finder.BE.Service.Configuration;
-using AI.Finder.BE.Service.Helpers;
 using AI.Finder.BE.Service.Helpers.ErrorHandling;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +27,7 @@ builder.Services.AddControllers().AddJsonOptions(option=>{option.JsonSerializerO
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(document => 
 {
+    document.Title = "FinderAPI";
     document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
     {
         In = OpenApiSecurityApiKeyLocation.Header,
@@ -71,5 +70,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
