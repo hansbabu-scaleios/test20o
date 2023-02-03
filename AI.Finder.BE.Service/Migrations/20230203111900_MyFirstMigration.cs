@@ -6,17 +6,23 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AI.Finder.BE.Service.Migrations
 {
-    public partial class MyMigration : Migration
+    public partial class MyFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "RoleCode",
-                table: "user");
-
-            migrationBuilder.DropColumn(
-                name: "RoleName",
-                table: "user");
+            migrationBuilder.CreateTable(
+                name: "activity",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Code = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_activity", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "address_type",
@@ -154,6 +160,20 @@ namespace AI.Finder.BE.Service.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "sample",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Code = table.Column<long>(type: "bigint", nullable: false),
+                    AuditProp = table.Column<string>(type: "jsonb", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sample", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SampleAutherization",
                 columns: table => new
                 {
@@ -182,6 +202,27 @@ namespace AI.Finder.BE.Service.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_unit", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    EmailId = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<long>(type: "bigint", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    PassowrdSalt = table.Column<string>(type: "text", nullable: true),
+                    EmailConfirmationToken = table.Column<string>(type: "text", nullable: true),
+                    EmailTokenGeneratedTimestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    PhoneConfirmationToken = table.Column<string>(type: "text", nullable: true),
+                    PhoneTokenGeneratedTimestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -506,6 +547,12 @@ namespace AI.Finder.BE.Service.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_sample_Code",
+                table: "sample",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_state_CountryId",
                 table: "state",
                 column: "CountryId");
@@ -538,10 +585,31 @@ namespace AI.Finder.BE.Service.Migrations
                 table: "unit",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_EmailId",
+                table: "user",
+                column: "EmailId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_PhoneNumber",
+                table: "user",
+                column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_UserId",
+                table: "user",
+                column: "UserId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "activity");
+
             migrationBuilder.DropTable(
                 name: "candidate");
 
@@ -549,7 +617,13 @@ namespace AI.Finder.BE.Service.Migrations
                 name: "religion");
 
             migrationBuilder.DropTable(
+                name: "sample");
+
+            migrationBuilder.DropTable(
                 name: "SampleAutherization");
+
+            migrationBuilder.DropTable(
+                name: "user");
 
             migrationBuilder.DropTable(
                 name: "address_type");
@@ -589,18 +663,6 @@ namespace AI.Finder.BE.Service.Migrations
 
             migrationBuilder.DropTable(
                 name: "country");
-
-            migrationBuilder.AddColumn<string>(
-                name: "RoleCode",
-                table: "user",
-                type: "text",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "RoleName",
-                table: "user",
-                type: "text",
-                nullable: true);
         }
     }
 }

@@ -22,6 +22,61 @@ namespace AI.Finder.BE.Service.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AI.Finder.BE.Service.Features.ActivityLog.ActivityLogModel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("ActivityTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CandidateId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityTypeId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("activity_log", (string)null);
+                });
+
+            modelBuilder.Entity("AI.Finder.BE.Service.Features.ActivityType.ActivityTypeModel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("activity", (string)null);
+                });
+
             modelBuilder.Entity("AI.Finder.BE.Service.Features.AddressType.AddressTypeModel", b =>
                 {
                     b.Property<long>("Id")
@@ -587,6 +642,27 @@ namespace AI.Finder.BE.Service.Migrations
                         .IsUnique();
 
                     b.ToTable("user", (string)null);
+                });
+
+            modelBuilder.Entity("AI.Finder.BE.Service.Features.ActivityLog.ActivityLogModel", b =>
+                {
+                    b.HasOne("AI.Finder.BE.Service.Features.ActivityType.ActivityTypeModel", "ActivityType")
+                        .WithMany()
+                        .HasForeignKey("ActivityTypeId");
+
+                    b.HasOne("AI.Finder.BE.Service.Features.Candidate.CandidateModel", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
+                    b.HasOne("AI.Finder.BE.Service.Features.User.UserModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ActivityType");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AI.Finder.BE.Service.Features.Candidate.CandidateModel", b =>
