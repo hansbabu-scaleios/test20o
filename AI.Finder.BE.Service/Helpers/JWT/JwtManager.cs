@@ -32,7 +32,7 @@ public class JwtManager
        return  (new JwtClaimsValue
         {
             UserId = token.Claims.First(c => c.Type == "userid").Value,
-            RoleName = token.Claims.First(c => c.Type == "rolename").Value,
+            Role = token.Claims.First(c => c.Type == "role").Value,
             Rolecode = token.Claims.First(c => c.Type == "rolecode").Value
         });
     }
