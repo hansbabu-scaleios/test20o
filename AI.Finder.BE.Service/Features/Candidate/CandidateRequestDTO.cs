@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AI.Finder.BE.Service.Features.Candidate
-{
-    public class CandidateRequestDTO
-    {
+namespace AI.Finder.BE.Service.Features.Candidate;
+
+    public class CandidateRequestDTO{
         [RequiredAttribute(ErrorMessage ="Please enter full name.")]
         [StringLength(50)]
         public string Name { get; set; }
@@ -55,4 +54,3 @@ namespace AI.Finder.BE.Service.Features.Candidate
         [RequiredAttribute(ErrorMessage ="Please select created by.")]
         public long CreatedContactId {get; set; }
     }
-}
