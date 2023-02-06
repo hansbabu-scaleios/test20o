@@ -123,7 +123,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "client-app/src/Model.ts",
+      "output": "client/dist/AI-Finder-BE-Service.ts",
       "newLineBehavior": "Auto"
     }
   }
