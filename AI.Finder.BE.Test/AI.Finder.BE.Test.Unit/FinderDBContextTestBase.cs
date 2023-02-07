@@ -6,19 +6,19 @@ namespace AI.Finder.BE.Test.Unit
 {
     public class FinderDBContextTestBase : IDisposable
     {
-        protected readonly FinderDbContext _context;
+        protected readonly FinderDbContext context;
         public FinderDBContextTestBase()
         {
             var options = new DbContextOptionsBuilder<FinderDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
              .Options;
-            _context = new FinderDbContext(options);
-            _context.Database.EnsureCreated();
+            context = new FinderDbContext(options);
+            context.Database.EnsureCreated();
         }
         public void Dispose()
         {
-            _context.Database.EnsureDeleted();
-            _context.Dispose();
+            context.Database.EnsureDeleted();
+            context.Dispose();
         }
     }
 }

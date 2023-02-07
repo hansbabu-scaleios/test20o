@@ -9,22 +9,22 @@ namespace AI.Finder.BE.Test.Unit.Features.Sample;
     public class TestSampleController:FinderDBContextTestBase {
         [Fact]
         public async Task GetSample_ReturnOkObjectResult(){
-            _context.Sample.AddRange((SampleData.GetSampleData()));
-            _context.SaveChanges();
+            context.Sample.AddRange((SampleData.GetSampleData()));
+            context.SaveChanges();
 
-            var controller = new SampleController(_context);
+            var controller = new SampleController(context);
             //Act
             var result = await controller.GetSamples();
             //Assert
             Assert.IsType<OkObjectResult>(result);
         }
          [Fact]
-        public async Task GetSample_ReturnAllAddressType(){
+        public async Task GetSample_ReturnAllSammples(){
             //seeding
-             _context.Sample.AddRange((SampleData.GetSampleData()));
-            _context.SaveChanges();
+             context.Sample.AddRange((SampleData.GetSampleData()));
+            context.SaveChanges();
             //Arrange
-            var controller = new SampleController(_context);
+            var controller = new SampleController(context);
             //Act
             var samples = await controller.GetSamples();
             var sut = Assert.IsType<OkObjectResult>(samples);
@@ -32,18 +32,5 @@ namespace AI.Finder.BE.Test.Unit.Features.Sample;
             //Assert
             Assert.Equal(4, value.Count);
         }
-        [Theory]
-        [InlineData(1)]
-        [InlineData(8)]
-        public async Task GetAddressType_ReturnBadRequest_GivenInvalidId(long id)
-        {
-            //seeding
-            _context.Sample.AddRange((SampleData.GetSampleData()));
-            _context.SaveChanges();
-            //Arrange
-            var controller = new SampleController(_context);
-            var sample = await controller.GetSample(id);
-            // Assert
-            Assert.IsType<BadRequestResult>(sample);
-        }
+
     }

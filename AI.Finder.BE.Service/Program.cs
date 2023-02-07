@@ -2,6 +2,8 @@ using System.Text;
 using AI.Finder.BE.Service;
 using AI.Finder.BE.Service.Helpers.ErrorHandling;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
@@ -25,7 +27,7 @@ builder.Services.AddDbContext<FinderDbContext>(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddControllers().AddJsonOptions(option=>{option.JsonSerializerOptions.PropertyNamingPolicy=null;});
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument(document => 
+builder.Services.AddSwaggerDocument(document => 
 {
     document.Title = "FinderAPI";
     document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
@@ -39,10 +41,7 @@ builder.Services.AddOpenApiDocument(document =>
     });
     document.OperationProcessors.Add(
         new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-    });
-
-
-
+});
 //implimentation ofjwt token
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
     options.TokenValidationParameters = new TokenValidationParameters{
@@ -64,10 +63,13 @@ if (app.Environment.IsDevelopment()){
     app.UseOpenApi();
     app.UseSwaggerUi3();
 }
-
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors(c => {
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+    c.AllowAnyOrigin();
+});
 app.MapControllers();
 app.Run();

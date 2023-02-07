@@ -7,6 +7,8 @@ using AI.Finder.BE.Service.Features.Candidate;
 using AI.Finder.BE.Service.Features.Religion;
 using AI.Finder.BE.Service.Features.ActivityType;
 using AI.Finder.BE.Service.Features.ActivityLog;
+using AI.Finder.BE.Service.Features.District;
+using AI.Finder.BE.Service.Features.Country;
 // TODO: All the namespace become like below
 namespace AI.Finder.BE.Service;
 // TODO: All the class and functions brackets in same line
@@ -20,6 +22,10 @@ public class FinderDbContext : DbContext{
   public DbSet<CandidateModel> Candidates { get; set; }
 
   public DbSet<ReligionModel> Religions{get;set;}
+
+    public DbSet<DistrictModel> Districts{get;set;}
+
+    public DbSet<CountryModel> Countries{get;set;}
   public DbSet<ActivityTypeModel> ActivityTypes{ get; set; }
   public DbSet<ActivityLogModel> ActivityLogs{ get; set; }
 
