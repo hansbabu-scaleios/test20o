@@ -41,9 +41,10 @@ builder.Services.AddOpenApiDocument(document =>
         new AspNetCoreOperationSecurityScopeProcessor("JWT"));
     });
 
+//implimentation azure insight
+builder.Services.AddApplicationInsightsTelemetry();
 
-
-//implimentation ofjwt token
+//implimentation of jwt token
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
     options.TokenValidationParameters = new TokenValidationParameters{
         ValidateIssuer = true,
