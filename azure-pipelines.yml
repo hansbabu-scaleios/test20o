@@ -34,7 +34,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: '$(project)'
+    projects: 'src/PROJECTNAME.Web.Mvc/PROJECTNAME.Web.Mvc.csproj'
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
