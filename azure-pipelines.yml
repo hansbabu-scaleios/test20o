@@ -32,7 +32,7 @@ steps:
     publishWebProjects: false
     projects: '**/*.csproj'
     arguments: '--configuration release --output $(build.artifactstagingdirectory) /property:PublishWithAspNetCoreTargetManifest=false'
-    zipAfterPublish: true
+    zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
