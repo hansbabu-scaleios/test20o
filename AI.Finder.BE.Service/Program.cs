@@ -49,7 +49,10 @@ services.AddSwaggerDocument(document =>
     });
     document.OperationProcessors.Add(
         new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-});
+    });
+
+//implimentation azure insight
+builder.Services.AddApplicationInsightsTelemetry();
 services.AddHttpClient();
 services.AddCors();
 services.AddAuthorization();
