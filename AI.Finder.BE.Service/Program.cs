@@ -14,8 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 var root = Directory.GetCurrentDirectory();
 var dotenv = Path.Combine(root, ".env");
 DotNetEnv.Env.Load(dotenv);
+
 // TODO: Load appsettings.json to FinderSettings class
 //builder.Services.AddSingleton<TokenInfo>(FinderSetting.GetTokenInfo());
+
 var services = builder.Services;
 services.AddDbContext<FinderDbContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString")));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -32,7 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 // Add services to the container.
-builder.Services.AddControllers();//.AddJsonOptions(option => { option.JsonSerializerOptions.PropertyNamingPolicy = null; });
+services.AddControllers();//.AddJsonOptions(option => { option.JsonSerializerOptions.PropertyNamingPolicy = null; });
 services.AddResponseCompression();
 // Open Api 
 services.AddSwaggerDocument(document =>
@@ -52,7 +54,8 @@ services.AddSwaggerDocument(document =>
     });
 
 //implimentation azure insight
-builder.Services.AddApplicationInsightsTelemetry();
+services.AddApplicationInsightsTelemetry();
+
 services.AddHttpClient();
 services.AddCors();
 services.AddAuthorization();

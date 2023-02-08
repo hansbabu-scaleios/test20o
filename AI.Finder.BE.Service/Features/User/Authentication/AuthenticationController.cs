@@ -21,15 +21,14 @@ public class AuthController : ControllerBase
         try{
             var expiryDate = Environment.GetEnvironmentVariable("ExpiryTime");
             var user = await context.Users
-                           .Where(e => e.UserId == req.UserId)
+                           .Where(e => e.UserId == req.UserId || e.EmailId==req.Email)
                            .FirstOrDefaultAsync();
             if (user == null){
                 return BadRequest();
             }
             if (AuthenticationManager.IsPasswordVerified(user.PassowrdSalt, user.PasswordHash, req.Password) == true){
 
-                return Ok(new AuthResponseDto
-                {
+                return Ok(new AuthResponseDto{
                     Success = true,
                     Token = new JwtSecurityTokenHandler().WriteToken(JwtManager.GenerateJwtToken(user.UserId, expiryDate))
                 });
