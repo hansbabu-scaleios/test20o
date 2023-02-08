@@ -50,3 +50,5 @@ nunit-*.xml
 # Temperory file
 test*.json
 
+
+.fake

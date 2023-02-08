@@ -55,6 +55,42 @@ public class CandidateData{
             NativesTown = GetTown()
         };
     }
+    public static CandidateModel GetCandidate2(){
+        return new CandidateModel{
+            Id = 2,
+            Gender = GetGender(),
+            Units = GetUnit(),
+            Complexion = GetComplexion(),
+            BodyType = GetBodyType(),
+            MaritalStatus = GetMaritalStatus(),
+            ChildrenWithMe = 0,
+            ChildrenNotWithMe = 0,
+            BloodGroup = GetBloodGroup(),
+            ResidentCountry = GetCountry(),
+            ResidentTown = "Kochi",
+            ResidentType = GetResidentType(),          
+            NativeTown = "Kochi",
+            MotherTongue = GetLanguage(),
+            ReligionTreePath = "1.2.4.5",
+            Name = "Akshay NR",
+            DOB = Convert.ToDateTime("1997-09-24"),
+            IsSpecialNeed = true,
+            IsResident = true,
+            HeightInCentimeter = 170,
+            WeightInKilogram = 65,
+            OtherReligion = "nil",
+            OtherReligiousInformation = "nil",
+            AboutMe = "nil",
+            CandidateAssetDetails = "nil",
+            TwinsCandidate = null,
+            RegistrationId = "no",
+            CreatedContact = GetAddressType(),
+            ResidentDistrct = GetDistrict(),
+            ResidentsTown = GetTown(),
+            NativeDistrict = GetDistrict(),
+            NativesTown = GetTown()
+        };
+    }
 
     public static GenderModel GetGender(){
         return new GenderModel{

@@ -30,4 +30,19 @@ public class ActivityLogData{
         };
        
     }
+    public static UserModel GetUser2(){
+        return new UserModel{
+        Id = 2,
+        UserId = "Abijith002",
+        EmailId = "abijith002@mail.com",
+        PhoneNumber = 1234567891,
+        PasswordHash ="fgdfgdfgdgdgfghghgdfvdfgdf",
+        PassowrdSalt = "dsfigrjdsgskbruirhuitbreb",
+        EmailConfirmationToken = "sdfuyfddssytfjkgdys",
+        EmailTokenGeneratedTimestamp = Convert.ToDateTime("01-02-2023"),
+        PhoneConfirmationToken = "dsfdsfsieriehgjhsdsvghf",
+        PhoneTokenGeneratedTimestamp = Convert.ToDateTime("01-02-2023")
+        };
+       
+    }
 }

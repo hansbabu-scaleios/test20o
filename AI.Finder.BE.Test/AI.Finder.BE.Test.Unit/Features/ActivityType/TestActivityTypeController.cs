@@ -38,4 +38,30 @@ public class TestActivityTypeController : FinderDBContextTestBase
         var final = Assert.IsType<ActivityTypeResponseDTO>(sut.Value);
         Assert.Equal("LOGIN", final.Code);
     }
+    [Fact]
+    public async Task PostActivityType_ReturnNewlyCreatedActivityType(){
+        context.ActivityTypes.AddRange(ActivityTypeData.GetActivityType());
+        context.SaveChanges();
+        var controller = new ActivityTypeController(context);
+        var activityType = await controller.CreateActivity(new ActivityTypeRequestDTO{
+            Code = "LOGOUT",
+            Type = "LogOut"
+        });
+        var result = Assert.IsType<OkObjectResult>(activityType);
+        var final = Assert.IsType<ActivityTypeResponseDTO>(result.Value);
+        Assert.Equal("LOGOUT", final.Code);
+    }
+    [Fact]
+    public async Task PutActivityType_ReturnOkResult_GivenValidId(){
+        context.ActivityTypes.AddRange(ActivityTypeData.GetActivityType());
+        context.SaveChanges();
+        var controller = new ActivityTypeController(context);
+        var activityType = await controller.UpdateActivity(1, new ActivityTypeRequestDTO{
+            Code = "MSENT",
+            Type = "Message Sent"
+        });
+        var result = Assert.IsType<OkObjectResult>(activityType);
+        var final = Assert.IsType<ActivityTypeResponseDTO>(result.Value);
+        Assert.Equal("MSENT", final.Code);
+    }
 }
