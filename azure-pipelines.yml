@@ -12,8 +12,8 @@ pool:
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution: '**/RoundTheCode.AzureTestProject.sln'
-  project: '**/RoundTheCode.AzureTestProject.csproj'
+  solution: '**/AI.Finder.BE.sln'
+  project: '**/AI.Finder.BE.Service.csproj'
 
 steps:
 - task: NuGetToolInstaller@1
