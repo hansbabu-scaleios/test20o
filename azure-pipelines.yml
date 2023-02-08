@@ -29,10 +29,9 @@ steps:
   displayName: Publish
   inputs:
     command: publish
-    publishWebProjects: false
+    publishWebProjects: true
     projects: '**/*.csproj'
     arguments: '--configuration release --output $(build.artifactstagingdirectory) /property:PublishWithAspNetCoreTargetManifest=false'
-    zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
