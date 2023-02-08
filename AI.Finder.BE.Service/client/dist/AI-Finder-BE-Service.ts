@@ -1413,32 +1413,32 @@ export class ActivityLogClient {
 }
 
 export interface UserRequestDTO {
-    UserId?: string | undefined;
-    EmailId?: string | undefined;
-    PhoneNumber: number;
-    Password?: string | undefined;
+    userId?: string | undefined;
+    emailId?: string | undefined;
+    phoneNumber: number;
+    password?: string | undefined;
 }
 
 export interface AuthRequestDTO {
-    UserId?: string | undefined;
-    Password?: string | undefined;
+    userId?: string | undefined;
+    password?: string | undefined;
 }
 
 export interface SampleRequestDTO {
-    Code: number;
-    AuditProp?: string | undefined;
+    code: number;
+    auditProp?: string | undefined;
 }
 
 export interface ActivityTypeRequestDTO {
-    Code?: string | undefined;
-    Type?: string | undefined;
+    code?: string | undefined;
+    type?: string | undefined;
 }
 
 export interface ActivityLogRequestDTO {
-    UserId: number;
-    CandidateId: number;
-    ActivityTypeId: number;
-    TimeStamp: Date;
+    userId: number;
+    candidateId: number;
+    activityTypeId: number;
+    timeStamp: Date;
 }
 
 export interface FileResponse {
