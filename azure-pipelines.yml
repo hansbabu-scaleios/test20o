@@ -30,12 +30,10 @@ steps:
   inputs:
     command: publish
     publishWebProjects: true
+    projects: '**/*.csproj'
+    arguments: '--configuration release --output $(build.artifactstagingdirectory) /property:PublishWithAspNetCoreTargetManifest=false'
 
-- task: AzureRmWebAppDeployment@4
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Chavara-Azure-Subscription (9448ada5-105c-488f-8af5-edcf114ff900)'
-    appType: 'webAppLinux'
-    WebAppName: 'chavradev2'
-    packageForLinux: 'myproject.zip'
-    RuntimeStack: 'DOTNETCORE|6.0'
+    ArtifactName: myproject
