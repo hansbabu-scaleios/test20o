@@ -37,3 +37,12 @@ steps:
   displayName: 'Publish Artifact'
   inputs:
     ArtifactName: myproject
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Chavara-Azure-Subscription (9448ada5-105c-488f-8af5-edcf114ff900)'
+    appType: 'webAppLinux'
+    WebAppName: 'chavradev2'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    RuntimeStack: 'DOTNETCORE|6.0'
